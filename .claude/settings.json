@@ -1,0 +1,12 @@
+{
+  "agent": "joko-manager",
+  "permissions": {
+    "additionalDirectories": ["../ujion-tka-apps"],
+    "deny": [
+      "Edit(../ujion-tka-apps/**)",
+      "Write(../ujion-tka-apps/**)",
+      "Read(../ujion-tka-apps/.env)",
+      "Read(../ujion-tka-apps/.env.*)"
+    ]
+  }
+}

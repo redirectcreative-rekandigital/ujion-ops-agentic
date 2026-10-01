@@ -1,0 +1,5 @@
+node_modules/
+.DS_Store
+*.log
+# Tambahkan di bawah bila laporan tertentu tidak ingin ikut ter-commit:
+# maintenance/audit-*

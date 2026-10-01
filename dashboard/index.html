@@ -1,0 +1,67 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kantor Ujion</title>
+<style>
+:root{--bg:#f3efe6;--pn:#fff;--tx:#242424;--mu:#7a756b;--bd:#e2dccd;--fl:#eadfc7;--dk:#c4a46a;--ac:#2f6f5e;--wn:#d9822b;--ok:#3a8f4f}
+@media(prefers-color-scheme:dark){:root{--bg:#16191b;--pn:#21262a;--tx:#e8e6e1;--mu:#98a0a4;--bd:#343b3f;--fl:#2b3032;--dk:#76653f;--ac:#5cc4a8;--wn:#f0a04b;--ok:#6cc380}}
+*{box-sizing:border-box}body{margin:0;font:14px/1.4 system-ui,sans-serif;background:var(--bg);color:var(--tx)}
+header{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--bd)}
+header h1{font-size:17px;margin:0;flex:1}.pill{background:var(--pn);border:1px solid var(--bd);border-radius:99px;padding:4px 12px;font-size:13px}.pill b{color:var(--ac)}.pill.w b{color:var(--wn)}
+main{display:grid;grid-template-columns:1.15fr 1fr;gap:14px;padding:14px;max-width:1500px;margin:auto}@media(max-width:900px){main{grid-template-columns:1fr}}
+.stage{position:relative;height:460px;border-radius:14px;border:1px solid var(--bd);overflow:hidden;background:repeating-linear-gradient(90deg,var(--fl) 0 38px,transparent 38px 40px),var(--fl)}
+.desk{position:absolute;width:15%;height:10%;transform:translate(-50%,-30%);background:var(--dk);border-radius:6px;box-shadow:0 3px 0 rgba(0,0,0,.18);display:flex;align-items:flex-end;justify-content:center;font-size:10px;color:#fff;padding-bottom:2px}
+.desk.j{width:20%}.zone{position:absolute;font-size:11px;color:var(--mu);border:2px dashed var(--bd);border-radius:12px;display:flex;align-items:flex-start;justify-content:center;padding-top:3px}
+.ch{position:absolute;transform:translate(-50%,-50%);transition:left 1.6s ease,top 1.6s ease,opacity .8s;text-align:center;cursor:pointer;width:96px}
+.ch .av{width:42px;height:42px;margin:auto;border-radius:50%;background:var(--pn);border:3px solid var(--bd);display:grid;place-items:center;font-size:22px}
+.ch.run .av{border-color:var(--ac);animation:bob .6s infinite alternate}.ch.ask .av{border-color:var(--wn)}.ch.sel .av{outline:3px solid var(--ac)}
+@keyframes bob{to{transform:translateY(-3px)}}
+.ch .nm{font-size:11px;font-weight:600;background:var(--pn);border-radius:6px;padding:0 5px;display:inline-block;margin-top:2px}
+.ch .bb{position:absolute;bottom:62px;left:50%;transform:translateX(-50%);background:var(--pn);border:1px solid var(--bd);border-radius:8px;padding:2px 7px;font-size:10px;white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis}
+.panel{background:var(--pn);border:1px solid var(--bd);border-radius:14px;padding:12px;min-height:460px}
+.row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+button,select{font:inherit;border:1px solid var(--bd);background:var(--bg);color:var(--tx);border-radius:8px;padding:4px 10px;cursor:pointer}
+button.on{background:var(--ac);color:#fff;border-color:var(--ac)}button.ok{border-color:var(--ok);color:var(--ok)}button.no{border-color:var(--wn);color:var(--wn)}
+.kan{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:8px}.col h4{margin:0 0 6px;font-size:12px;color:var(--mu);text-transform:uppercase}
+.card select{width:100%;margin-top:6px}.card{min-width:0;border:1px solid var(--bd);border-radius:10px;padding:8px;margin-bottom:8px;background:var(--bg)}.card small{display:block;color:var(--mu);margin-top:3px;word-break:break-all}
+.card .id{font-weight:700;color:var(--ac)}.empty{color:var(--mu);padding:20px 0;text-align:center}
+dialog{max-width:760px;width:92%;border:1px solid var(--bd);border-radius:12px;background:var(--pn);color:var(--tx)}pre{white-space:pre-wrap;font:13px/1.5 ui-monospace,monospace}
+@media(max-width:600px){header{padding:8px 10px;gap:6px}header h1{font-size:15px}.pill{padding:3px 9px;font-size:12px}main{padding:8px;gap:10px}.stage{height:300px}.panel{padding:10px;min-height:0}.kan{grid-template-columns:1fr}.ch{width:74px}.ch .bb{max-width:110px}dialog{width:96%;max-height:86vh}pre{font-size:12px}}
+</style></head><body>
+<header><h1>🏢 Kantor <span id="pj"></span></h1><span class="pill">Berjalan <b id="c1">0</b></span><span class="pill w">Butuh Anda <b id="c2">0</b></span><span class="pill">Selesai <b id="c3">0</b></span><span class="pill" id="up">…</span></header>
+<main><section><div class="stage" id="stage"></div><p style="color:var(--mu);font-size:12px">Status diambil dari <code>tugas/BOARD.md</code>. Tugas “Jalan” = agent duduk di mejanya; selain itu santai di lounge. Klik agent untuk menyaring. Aktivitas nyata real-time tetap bisa dilihat di Kantor Agent.</p></section>
+<section class="panel"><div class="row" id="chips"></div><div class="row" id="tabs"></div><div id="body"></div></section></main>
+<dialog id="dlg"><pre id="pre"></pre><button onclick="dlg.close()">Tutup</button></dialog>
+<script>
+const AG=[{k:'joko',n:'Joko',r:'Ketua',e:'🧑‍💼',d:[50,17]},{k:'budi',n:'Budi',r:'Konten',e:'✍️',d:[14,52],l:[74,14]},{k:'sari',n:'Sari',r:'SEO & Analitik',e:'📈',d:[34,52],l:[85,14]},{k:'agus',n:'Agus',r:'Sosmed & WA',e:'📣',d:[54,52],l:[93,14]},{k:'rina',n:'Rina',r:'Maintenance',e:'🛡️',d:[74,52],l:[84,28]},{k:'riset',n:'Freelancer Riset',r:'tamu',e:'🔎',d:[14,84],f:1},{k:'brief',n:'Freelancer Brief',r:'tamu',e:'🎨',d:[34,84],f:1},{k:'cek',n:'Freelancer QC',r:'tamu',e:'✅',d:[54,84],f:1}];
+const COLS=['Belum','Jalan','Menunggu persetujuan','Selesai','Terblokir'];
+let S=null,SEL=null,TAB='tugas';const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),st=r=>(r.status||'').toLowerCase();
+const fin=r=>/selesai|terjawab|disetujui|ditolak|dieksekusi/.test(st(r)),re=a=>new RegExp(a.k=='cek'?'cek|kualitas':a.k,'i'),mine=(a,r)=>re(a).test(r.agent||'');
+const col=t=>COLS.find(c=>st(t).includes(c.toLowerCase().slice(0,5)))||'Belum';
+function info(a){const T=S.tasks.filter(t=>a.k=='joko'||mine(a,t)),run=T.filter(t=>col(t)=='Jalan'),
+ ask=S.needs.filter(n=>!fin(n)&&(a.k=='joko'||mine(a,n))).length+(a.k=='joko'?S.queue.filter(q=>!fin(q)).length+S.owner.length:0);return{run,ask,open:T.filter(t=>!fin(t)).length}}
+function stage(){const el=$('#stage');if(!el.dataset.ok){el.dataset.ok=1;el.innerHTML='<div class="zone" style="left:66%;top:3%;width:32%;height:34%">Lounge ☕ 📺</div><div class="zone" style="left:2%;top:3%;width:26%;height:20%">Papan tulis 📝</div><div class="zone" style="left:90%;top:80%;width:9%;height:16%">🚪</div>'+
+ AG.map(a=>`<div class="desk ${a.k=='joko'?'j':''}" style="left:${a.d[0]}%;top:${a.d[1]}%">${a.k=='joko'?'Meja Ketua':a.f?'Meja cadangan':'Meja '+a.n}</div>`).join('')+
+ AG.map(a=>`<div class="ch" id="ch-${a.k}" onclick="pick('${a.k}')"><div class="bb"></div><div class="av">${a.e}</div><span class="nm">${a.n}</span></div>`).join('')}
+ AG.forEach(a=>{const i=info(a),c=$('#ch-'+a.k),run=i.run.length>0;let p=run?[a.d[0],a.d[1]-9]:(a.l||[a.d[0],a.d[1]-9]);let vis=1;if(a.f&&!run){p=[96,90];vis=0}
+  c.style.left=p[0]+'%';c.style.top=p[1]+'%';c.style.opacity=vis;c.className='ch '+(run?'run ':'')+(i.ask?'ask ':'')+(SEL==a.k?'sel':'');
+  c.querySelector('.bb').textContent=run?'⌨️ '+(i.run[0].judul||'').slice(0,26):i.ask?'❗ butuh Anda ('+i.ask+')':(a.k=='joko'?'☕ santai':'💤 santai')})}
+function pick(k){SEL=SEL==k?null:k;render()}
+async function act(file,id,status){await fetch('/api/set',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({file,id,status})});load()}
+async function view(p){$('#pre').textContent=await (await fetch('/api/file?p='+encodeURIComponent(p))).text();dlg.showModal()}
+const who=r=>{const a=AG.find(a=>mine(a,r));return a?a.e+' '+a.n:esc(r.agent||'')};
+const filt=l=>SEL?l.filter(r=>mine(AG.find(a=>a.k==SEL),r)):l;
+function body(){let h='';
+ if(TAB=='tugas'){const T=filt(S.tasks);h='<div class="kan">'+COLS.map(c=>{const L=T.filter(t=>col(t)==c);return`<div class="col"><h4>${c} (${L.length})</h4>${L.map(t=>`<div class="card"><span class="id">${esc(t.id)}</span> ${who(t)}<div>${esc(t.judul)}</div>${t.dep&&t.dep!='-'?`<small>butuh: ${esc(t.dep)}</small>`:''}${t.file&&t.file!='-'?`<small>${esc(t.file)}</small>`:''}<select onchange="act('board','${esc(t.id)}',this.value)">${COLS.map(o=>`<option ${o==c?'selected':''}>${o}</option>`).join('')}</select></div>`).join('')||'<div class="empty">—</div>'}</div>`}).join('')+'</div>'}
+ if(TAB=='butuh'){const N=filt(S.needs).filter(n=>!fin(n));h=N.map(n=>`<div class="card"><span class="id">${esc(n.id)}</span> ${who(n)} <b>${esc(n.butuh)}</b><small>Alasan: ${esc(n.alasan)}</small><small>Format: ${esc(n.format)} · Menghambat: ${esc(n.menghambat)}</small><button class="ok" onclick="act('needs','${esc(n.id)}','Terjawab')">Sudah saya berikan</button></div>`).join('')||'<div class="empty">Tidak ada kebutuhan terbuka 🎉</div>';
+  if(S.owner.length&&!SEL)h+='<h4>Untuk pemilik (kode/manual)</h4>'+S.owner.map(o=>`<div class="card">${esc(o)}</div>`).join('')}
+ if(TAB=='setuju'){h=S.queue.map(q=>`<div class="card"><span class="id">${esc(q.id)}</span> <b>${esc(q.judul)}</b> <small>${esc(q.kanal)} · ${esc(q.jadwal)} · status: ${esc(q.status)}</small>${q.file?`<small><a href="#" onclick="view('${esc(q.file)}');return false">${esc(q.file)}</a></small>`:''}${fin(q)?'':`<button class="ok" onclick="act('queue','${esc(q.id)}','Disetujui')">Setujui</button> <button class="no" onclick="act('queue','${esc(q.id)}','Ditolak')">Tolak</button>`}${/disetujui/.test(st(q))?`<button onclick="act('queue','${esc(q.id)}','Sudah dieksekusi')">Sudah dieksekusi</button>`:''}</div>`).join('')||'<div class="empty">Antrian kosong</div>'}
+ if(TAB=='inbox')h=S.inbox.map(i=>`<div class="card">${esc(i)}</div>`).join('')||'<div class="empty">Inbox kosong. Kirim apa saja ke Joko.</div>';
+ if(TAB=='berkas')h=S.files.map(f=>`<div class="card"><a href="#" onclick="view('${esc(f.p)}');return false">${esc(f.p)}</a><small>${new Date(f.t).toLocaleString('id-ID')}</small></div>`).join('')||'<div class="empty">Belum ada berkas</div>';
+ $('#body').innerHTML=h}
+function render(){if(!S)return;$('#pj').textContent=S.project;
+ const run=S.tasks.filter(t=>col(t)=='Jalan').length,ask=S.needs.filter(n=>!fin(n)).length+S.queue.filter(q=>!fin(q)).length+S.owner.length;
+ $('#c1').textContent=run;$('#c2').textContent=ask;$('#c3').textContent=S.tasks.filter(t=>col(t)=='Selesai').length;$('#up').textContent='diperbarui '+new Date(S.ts).toLocaleTimeString('id-ID');
+ $('#chips').innerHTML=AG.map(a=>{const i=info(a);return`<button class="${SEL==a.k?'on':''}" onclick="pick('${a.k}')">${a.e} ${a.n}${i.open?' · '+i.open:''}${i.ask?' ❗':''}</button>`}).join('');
+ const T=[['tugas','To-do'],['butuh','Kebutuhan'],['setuju','Persetujuan'],['inbox','Inbox'],['berkas','Berkas']];
+ $('#tabs').innerHTML=T.map(([k,l])=>`<button class="${TAB==k?'on':''}" onclick="TAB='${k}';render()">${l}</button>`).join('');stage();body()}
+async function load(){try{S=await (await fetch('/api/state')).json();render()}catch{$('#up').textContent='server mati?'}}
+load();setInterval(load,3000);
+</script></body></html>

@@ -1,0 +1,8 @@
+{
+  "title": "Ujion TKA",
+  "names": {
+    "ketua": "Joko",
+    "team": ["Budi", "Sari", "Agus", "Rina"]
+  },
+  "autostart": false
+}
