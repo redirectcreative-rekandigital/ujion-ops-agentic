@@ -12,6 +12,9 @@ Dokumen: [`PRD.md`](PRD.md) produk · [`PASANG.md`](PASANG.md) pemasangan · [`C
 | Path | Isi |
 |---|---|
 | `.claude/agents/` | 8 definisi agent + `settings.json` (Joko sebagai sesi utama) |
+| `.claude/skills/` | 5 skill terpreload (`audit-keamanan`, `pindai-rahasia`, `kalender-konten`, `cek-kualitas`, `ulasan-mingguan`) + 3 slash command (`/kampanye`, `/audit`, `/ulasan`) |
+| `.claude/hooks/` | `rina-bash-guard.mjs` — hook PreToolUse, Bash Rina deny-by-default (baca-saja) |
+| `tools/` | `pindai.mjs` — pemindai pola rahasia/data pribadi (bulanan) |
 | `tugas/` | BOARD, KEBUTUHAN, KEPUTUSAN, ANTRIAN-PERSETUJUAN, INBOX |
 | `marketing/` | `basis/` (kompetitor, tren, audiens, ide) + output: `konten/`, `analitik/`, `kampanye/`, `riset/`, `brief/` |
 | `maintenance/` | laporan audit keamanan, log, draf konten admin |
@@ -19,20 +22,28 @@ Dokumen: [`PRD.md`](PRD.md) produk · [`PASANG.md`](PASANG.md) pemasangan · [`C
 | `docs/` | dokumentasi rujukan |
 
 ## Menjalankan
-Prasyarat: **Node >= 18**, **Claude Code**, dan **bash** (Windows: jalankan di WSL). Letakkan `ujion-ops` sejajar dengan `ujion-tka-apps`.
+Prasyarat: **Node >= 18**, **Claude Code** (versi yang mendukung frontmatter `skills`/`hooks`), dan **bash** (Windows: jalankan di WSL). Letakkan `ujion-ops` sejajar dengan `ujion-tka-apps`.
 
 ```bash
 ./mulai.sh                              # Claude Code + Joko (izin baca ../ujion-tka-apps)
 ./dashboard.sh                           # dashboard -> http://127.0.0.1:8790
 node dashboard/server.mjs dashboard/contoh   # lihat dashboard dengan data contoh
 node dashboard/uji.mjs                   # uji otomatis (21 pemeriksaan, harus 21/21)
+node tools/pindai.mjs                    # pindai rahasia (exit 0 = bersih)
 ```
 Bila `Permission denied`: `bash mulai.sh`.
 
-Di dalam Claude Code: ketik `/agents` (harus muncul 8 agent), lalu bicara ke Joko, misalnya:
+Setelah sesi pertama dibuka:
+1. **Terima workspace trust** untuk folder `ujion-ops` — tanpa ini hook guard Bash Rina dilewati Claude Code.
+2. Ketik `/agents` (harus muncul 8 agent) dan `/skills` (harus ada skill di atas + 3 slash command).
+3. Uji cepat: minta Joko "jalankan /ulasan" atau minta Rina audit kecil, lalu pastikan `git status` repo ini hanya berubah di `tugas/`, `marketing/`, `maintenance/`.
+
+Bicara ke Joko, misalnya:
 - "Buat kampanye 2 minggu pendaftaran guru SMP lewat Instagram dan WA."
 - "Audit keamanan modul pembayaran Doku."
 - "Catat link ini: ..." (kiriman bebas — Joko yang memilah)
+
+Atau pakai slash command (manual, tidak dipanggil otomatis): `/kampanye [deskripsi]`, `/audit [cakupan]`, `/ulasan [rentang]`.
 
 ## Aturan singkat
 1. Agent **tidak menyentuh kode** — `../ujion-tka-apps` hanya-baca; tulisan hanya di `tugas/`, `marketing/`, `maintenance/`.

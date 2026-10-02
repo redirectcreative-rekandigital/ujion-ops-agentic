@@ -4,7 +4,7 @@
 |---|---|
 | Tanggal | 1 Oktober 2026 |
 | Dasar evaluasi | 8 berkas `.claude/agents/*.md`, `CLAUDE.md`, `.claude/settings.json`, `docs/*`, dan dokumentasi resmi Claude Code |
-| Status | Belum dieksekusi — daftar saran untuk dipertimbangkan pemilik |
+| Status | Sebagian dieksekusi 2 Okt 2026 (S1, S3, S4); S2a, S5, S6, S8 dieksekusi 2 Okt 2026; sisanya menunggu Tahap 1 |
 
 Dokumen ini mencatat hasil audit kemampuan (skill) seluruh agent beserta referensi, saran perbaikan, dan koreksi terhadap asumsi di PRD. Belum ada satu pun poin yang dikerjakan; centang pada bagian rencana bila disetujui.
 
@@ -84,11 +84,13 @@ Saran: perbarui tabel asumsi PRD bagian 12 setelah Tahap 1 diuji, bukan diraguka
 - Protokol 3 blok KEBUTUHAN/SERAH-TERIMA/TEMUAN BARU sudah seragam di 8 agent.
 
 ## 6. Rencana (centang bila disetujui)
-- [ ] S1 Tambah anti-injection ke 4 file sisa
-- [ ] S2a Hook `PreToolUse` Rina **atau** S2b uji `cat .env` di Tahap 1 (U26)
-- [ ] S3 Catatan `.claude/` di CLAUDE.md
-- [ ] S4 Buat 4–5 skill + `skills:` frontmatter
-- [ ] S5 Slash command `/kampanye` `/audit` `/ulasan`
-- [ ] S6 `memory` (Sari, Rina) + `initialPrompt` (Joko)
-- [ ] S8 Skrip `tools/pindai.mjs`
+- [x] S1 Tambah anti-injection ke 4 file sisa (2026-10-02: Joko, Rina, brief, QC)
+- [x] S2a Hook `PreToolUse` Rina **atau** S2b uji `cat .env` di Tahap 1 (U26) (2026-10-02: `.claude/hooks/rina-bash-guard.mjs`, deny-by-default; U26 tetap perlu diuji)
+- [x] S3 Catatan `.claude/` di CLAUDE.md (2026-10-02, aturan mutlak #7)
+- [x] S4 Buat 4–5 skill + `skills:` frontmatter (2026-10-02: `audit-keamanan`, `pindai-rahasia`, `kalender-konten`, `cek-kualitas`, `ulasan-mingguan` di `.claude/skills/`; terpasang di Joko, Rina, Agus, QC)
+- [x] S5 Slash command `/kampanye` `/audit` `/ulasan` (2026-10-02: `.claude/skills/{kampanye,audit,ulasan}/SKILL.md`, `disable-model-invocation: true`)
+- [x] S6 `memory` (Sari, Rina) + `initialPrompt` (Joko) (2026-10-02, scope `project`)
+- [x] S8 Skrip `tools/pindai.mjs` (2026-10-02, uji: 3/3 temuan planted terdeteksi, repo bersih exit 0)
 - [ ] Perbarui tabel asumsi PRD §12 setelah Tahap 1 lulus
+
+**Pengingat pemasangan:** skill baru perlu diverifikasi terbaca di versi Claude Code 2.1.133 (U1 `/agents` + jalankan satu tugas yang memakai skill) — bila field `skills:` belum didukung, agent tetap jalan dengan prosa lama, skill tinggal dipanggil manual sebagai konteks.

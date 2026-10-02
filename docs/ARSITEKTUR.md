@@ -32,7 +32,10 @@
   ujion-tka-apps/            aplikasi Laravel (publik di GitHub) - HANYA-BACA bagi agent
   ujion-ops/                 repo PRIVATE - jalankan Claude Code dari sini
     .claude/agents/*.md      definisi 8 agent
+    .claude/skills/<nama>/SKILL.md  skill yang dipreload via frontmatter `skills:` + slash command (/kampanye, /audit, /ulasan)
+    .claude/hooks/*.mjs      hook PreToolUse (guard Bash Rina)
     .claude/settings.json    agent utama, izin folder tambahan, aturan deny
+    tools/pindai.mjs         pemindai pola rahasia (bulanan)
     .claude/kantor-agent.json
     CLAUDE.md                aturan tim
     tugas/                   BOARD, KEBUTUHAN, KEPUTUSAN, ANTRIAN-PERSETUJUAN, INBOX

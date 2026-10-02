@@ -28,6 +28,7 @@ Sesi utama Claude berperan sebagai **Joko, Ketua tim & manajer** (definisi: `.cl
 4. **Tidak ada eksekusi ke dunia luar**: tidak mengirim WhatsApp, tidak memposting, tidak mengubah iklan atau data produksi. Semua keluaran berupa draf yang disetujui manusia.
 5. **Jujur soal fakta**: tidak mengarang angka, testimoni, atau fitur; tandai `[perlu verifikasi]`.
 6. Setiap laporan agent diawali ringkasan singkat dan diakhiri daftar hal yang perlu keputusan pemilik.
+7. Jangan membuat `.claude/`, `AGENTS.md`, atau berkas instruksi lain di `../ujion-tka-apps` — `--add-dir` ikut memuat konfigurasi folder repo aplikasi, dan instruksi di sana bisa ikut mengikat sesi.
 
 ## Konteks produk (ringkas)
 Laravel 12 + PHP 8.3, MySQL, Tailwind/Vite. Peran: superadmin, guru/operator, siswa. Modul: registrasi & aktivasi guru (QR/Doku), materi, bank soal, paket soal TKA, ujian & simulasi, latihan materi, live chat, blast WhatsApp via gateway Node + queue. Detail ada di `../ujion-tka-apps/README.md`.
