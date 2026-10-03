@@ -4,9 +4,17 @@
     "additionalDirectories": ["../ujion-tka-apps"],
     "deny": [
       "Edit(../ujion-tka-apps/**)",
-      "Write(../ujion-tka-apps/**)",
+      "Edit(//**/ujion-tka-apps/**)",
       "Read(../ujion-tka-apps/.env)",
-      "Read(../ujion-tka-apps/.env.*)"
+      "Read(../ujion-tka-apps/.env.*)",
+      "Read(!../ujion-tka-apps/.env.example)",
+      "Read(//**/.env)",
+      "Read(//**/ujion-tka-apps/.env.production)",
+      "Read(//**/ujion-tka-apps/.env.local)",
+      "Read(//**/ujion-tka-apps/.env.development)",
+      "Read(//**/ujion-tka-apps/.env.staging)",
+      "Read(//**/ujion-tka-apps/.env.test)",
+      "Read(//**/ujion-tka-apps/.env.backup)"
     ]
   }
 }

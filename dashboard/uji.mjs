@@ -86,6 +86,15 @@ try {
     cek('U16', 'Berkas di luar tiga folder ditolak (403)', rahasia.code === 403);
     cek('U16', 'Berkas non-.md ditolak (403)', nonMd.code === 403);
   }
+
+  const html = fs.readFileSync(path.join(here, 'index.html'), 'utf8');
+  const escjSrc = (html.match(/^const escj=(.*);$/m) || [])[1];
+  let escj = null;
+  try { escj = eval('(' + escjSrc + ')'); } catch { escj = null; }
+  cek('U28', 'Fungsi escj didefinisikan di dashboard', typeof escjSrc === 'string' && typeof escj === 'function');
+  cek('U28', 'escj menetralkan payload kutip satu', !!escj && escj("x');fetch('/x');//") === "x\\');fetch(\\'/x\\');//");
+  cek('U28', 'escj ikut meng-escape < & dan ">', !!escj && escj('<img src=x>').includes('&lt;') && escj('a&b').includes('&amp;'));
+  cek('U28', 'Nilai dinamis di onclick/onchange memakai escj, bukan esc mentah', !/\bon(?:click|change)="[^"]*\$\{esc\(/.test(html));
 } finally {
   pulihkan();
   server.kill();

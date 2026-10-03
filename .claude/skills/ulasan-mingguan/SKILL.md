@@ -19,7 +19,7 @@ File: `tugas/ulasan-TANGGAL.md` (mis. `ulasan-2026-10-02.md`). Sumber: `tugas/BO
 - <ID>: <status> — <alasan: menunggu kebutuhan/menyetujui/blokir>
 
 ## 3. Hasil kampanye & pekerjaan minggu ini
-- <file keluaran utama + satu bariskesanimpulan; bila belum ada data tayang: "belum ada data"]
+- <file keluaran utama + satu baris kesimpulan; bila belum ada data tayang: "belum ada data"]
 
 ## 4. Tiga prioritas minggu depan
 1. ...

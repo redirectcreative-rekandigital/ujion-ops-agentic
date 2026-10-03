@@ -11,10 +11,11 @@ Dokumen: [`PRD.md`](PRD.md) produk · [`PASANG.md`](PASANG.md) pemasangan · [`C
 ## Struktur
 | Path | Isi |
 |---|---|
-| `.claude/agents/` | 8 definisi agent + `settings.json` (Joko sebagai sesi utama) |
+| `.claude/agents/` | 8 definisi agent |
+| `.claude/settings.json` | sesi utama Joko + permission `deny` baca/tulis repo aplikasi (anchor `//**/ujion-tka-apps/**` dan `//**/.env`; `.env.example` tetap boleh dibaca) |
 | `.claude/skills/` | 5 skill terpreload (`audit-keamanan`, `pindai-rahasia`, `kalender-konten`, `cek-kualitas`, `ulasan-mingguan`) + 3 slash command (`/kampanye`, `/audit`, `/ulasan`) |
 | `.claude/hooks/` | `rina-bash-guard.mjs` — hook PreToolUse, Bash Rina deny-by-default (baca-saja) |
-| `tools/` | `pindai.mjs` — pemindai pola rahasia/data pribadi (bulanan) |
+| `tools/` | `pindai.mjs` — pemindai pola rahasia/data pribadi (bulanan) · `uji-guard.mjs` — uji 68 skenario hook Rina |
 | `tugas/` | BOARD, KEBUTUHAN, KEPUTUSAN, ANTRIAN-PERSETUJUAN, INBOX |
 | `marketing/` | `basis/` (kompetitor, tren, audiens, ide) + output: `konten/`, `analitik/`, `kampanye/`, `riset/`, `brief/` |
 | `maintenance/` | laporan audit keamanan, log, draf konten admin |
@@ -28,8 +29,9 @@ Prasyarat: **Node >= 18**, **Claude Code** (versi yang mendukung frontmatter `sk
 ./mulai.sh                              # Claude Code + Joko (izin baca ../ujion-tka-apps)
 ./dashboard.sh                           # dashboard -> http://127.0.0.1:8790
 node dashboard/server.mjs dashboard/contoh   # lihat dashboard dengan data contoh
-node dashboard/uji.mjs                   # uji otomatis (21 pemeriksaan, harus 21/21)
+node dashboard/uji.mjs                   # uji otomatis (25 pemeriksaan, harus 25/25)
 node tools/pindai.mjs                    # pindai rahasia (exit 0 = bersih)
+node tools/uji-guard.mjs                 # uji hook Rina (68 skenario, exit 0 = bersih)
 ```
 Bila `Permission denied`: `bash mulai.sh`.
 

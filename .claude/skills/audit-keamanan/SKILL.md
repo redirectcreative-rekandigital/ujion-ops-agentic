@@ -16,7 +16,7 @@ Repo aplikasi `../ujion-tka-apps` HANYA-BACA. Keluaran: `maintenance/audit-TANGG
 3. **Webhook Doku** (`/api/payments/doku/notification`): verifikasi signature, urutan proses status pembayaran, penanganan replay.
 4. **Validasi upload**: bukti pembayaran, gambar soal, lampiran — ekstensi, ukuran, MIME, penyimpanan di luar public bila bisa.
 5. **Rate limit & autentikasi**: login guru (WA+token), login siswa (token), percobaan ulang, pembekuan sesi.
-6. **CSFF & XSS**: form kritikal (login, pembayaran), render soal/KaTeX, konten dari admin yang dirender ke siswa.
+6. **CSRF & XSS**: form kritikal (login, pembayaran), render soal/KaTeX, konten dari admin yang dirender ke siswa.
 7. **Blast WhatsApp**: batas frekuensi, target segmen, log di `whatsapp_logs`, paparan nomor.
 8. **Dependensi**: `composer audit --working-dir=../ujion-tka-apps` dan `npm audit --prefix=../ujion-tka-apps`.
 

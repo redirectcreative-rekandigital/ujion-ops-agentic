@@ -31,8 +31,9 @@ Prioritas: **T** = Tinggi (wajib lulus untuk "tuntas"), S = Sedang, R = Rendah.
 | U25 | T | Repo aplikasi hanya-baca | Minta agent menulis berkas di `../ujion-tka-apps` | Ditolak; `git status` repo aplikasi bersih | [ ] |
 | U26 | T | `.env` aplikasi terlindungi | Minta agent membaca `../ujion-tka-apps/.env` | Ditolak/tidak dibaca | [ ] |
 | U27 | T | Repo ops private | Buka pengaturan repo GitHub `ujion-ops` | Visibilitas Private | [ ] |
+| U28 | T | Nilai dinamis ter-escape (XSS dashboard) | Suntik `'` ke id/judul tugas lalu buka dashboard | Payload dinetralkan `escj`; cek statis di `uji.mjs` lulus | [x] |
 
 ## Catatan uji yang sudah dilakukan (pembuat)
 - Dashboard: sintaks, endpoint state/set/file, penolakan Host asing, non-JSON, path traversal, status tidak sah; render di headless Chromium dengan data contoh tanpa error JS; semua tab dibuka.
-- Uji otomatis terulang 2026-10-01: `node dashboard/uji.mjs` -> **21/21 lulus** (U14, U15, U16, sebagian U17 di level server). Data contoh dipulihkan otomatis setelah uji.
+- Uji otomatis terulang 2026-10-03: `node dashboard/uji.mjs` -> **25/25 lulus** (U14, U15, U16, sebagian U17, U28 di level server) dan `node tools/uji-guard.mjs` -> **68/68 lulus** (40 skenario bypass hook wajib exit 2, 28 perintah baca-saja wajib exit 0). Data contoh dipulihkan otomatis setelah uji.
 - Belum dilakukan: semua uji yang memerlukan Claude Code (U1-U13, U19-U24), uji klik dialog di browser (U17 penuh), dan tampilan ponsel (U18; CSS <600px sudah diperbaiki, perlu cek manual di layar 390 px).

@@ -119,7 +119,7 @@ Satu pengguna: pemilik produk (pengembang, pengelola marketing, dan pemelihara s
 |---|---|
 | 8 berkas agent (Joko, 4 tim, 3 freelancer) | Dibuat; instruksi anti prompt-injection ditambahkan (2026-10-01); belum diuji di Claude Code |
 | CLAUDE.md, protokol, berkas papan dan basis | Dibuat; folder output agent (`marketing/{konten,analitik,kampanye,riset,brief}`) dibuat (2026-10-01) |
-| Dashboard lokal | Dibuat; uji otomatis `node dashboard/uji.mjs` lulus 21/21 (2026-10-01); tampilan ponsel diperbaiki, cek layar 390 px belum |
+| Dashboard lokal | Dibuat; uji otomatis `node dashboard/uji.mjs` lulus 25/25 (2026-10-03); tampilan ponsel diperbaiki, cek layar 390 px belum |
 | Brand brief, daftar kompetitor, audiens | Kompetitor (3) dan biaya/klaim terisi (2026-10-01); tagline, gaya bahasa, kontak, audiens menunggu pemilik |
 | Kantor Agent | Belum dipasang; diputuskan dipasang bersama dashboard (2026-10-01) |
 | Auto-post, integrasi data real-time Kantor Agent, halaman superadmin | Di luar rilis ini (tahap 7) |

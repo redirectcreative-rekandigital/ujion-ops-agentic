@@ -181,18 +181,20 @@ Pemilik mengeksekusi → menempelkan hasil (jangkauan, balasan) → Joko menerus
 
 Uji yang tetap **harus dijalankan sungguhan** (tidak bisa disimulasikan): U1–U4, U7 (format temuan asli), U19–U20, U23–U24, seluruh Tahap 1.
 
-## 6. Bukti teknis nyata (dijalankan, commit `b6e9bd8`)
+## 6. Bukti teknis nyata (dijalankan ulang 2026-10-03)
 
 ```text
-$ node dashboard/uji.mjs              -> LULUS U16 ... 21/21 lulus
-$ node tools/pindai.mjs               -> Bersih: 0 temuan dari 40 berkas.
+$ node dashboard/uji.mjs              -> LULUS U16 ... 25/25 lulus
+$ node tools/pindai.mjs               -> Bersih: 0 temuan dari 41 berkas.
+$ node tools/uji-guard.mjs            -> 68/68 lulus (40 skenario wajib blokir + 28 wajib lolos)
 
-$ hook rina-bash-guard.mjs (PreToolUse, deny-by-default):
+$ hook rina-bash-guard.mjs (PreToolUse, deny-by-default, fail-closed):
   git -C ../ujion-tka-apps log -1                 -> exit 0  (lolos)
   tail .../storage/logs/laravel.log               -> exit 0  (lolos)
-  cat ../ujion-tka-apps/.env                      -> exit 2  DIBLOKIR (.env/rahasia)
+  cat ../ujion-tka-apps/.env                      -> exit 2  DIBLOKIR (.env)
   php ../ujion-tka-apps/artisan migrate:fresh      -> exit 2  DIBLOKIR (ubah data)
-  (16 skenario diuji sebelumnya: redirect >, rm, git push, curl, test -> semua exit 2)
+  find . -delete | grep -rn "" ../ujion-tka-apps  -> exit 2  DIBLOKIR (celah lama)
+  cat ../ujion-tka-apps/.env.example              -> exit 2 di Bash; lewat Read tool diizinkan
 ```
 
 ## 7. Masalah yang ditemukan dari simulasi ini
