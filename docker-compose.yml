@@ -1,0 +1,59 @@
+# ujion-ops/docker-compose.yml — deployment Coolify (11-DOCKER-COOLIFY.md).
+# Model: container HANYA dashboard Next.js. opencode serve jalan di HOST
+# via systemd (dashboard-v2/deploy/pasang-opencode-serve.sh).
+version: "3.8"
+
+services:
+  dashboard:
+    build:
+      context: ./dashboard-v2
+      dockerfile: Dockerfile
+    container_name: ujion-dashboard
+    ports:
+      - "3000:3000"
+    extra_hosts:
+      # Agar container bisa menjangkau opencode serve di host (127.0.0.1:4096)
+      - "host.docker.internal:host-gateway"
+    environment:
+      # Auth
+      DASHBOARD_PIN: ${DASHBOARD_PIN:-245100}
+      JWT_SECRET: ${JWT_SECRET}
+      MASTER_KEY: ${MASTER_KEY}
+
+      # opencode (serve di HOST via systemd, bukan di container)
+      OPENCODE_SERVER_URL: http://host.docker.internal:4096
+      OPENCODE_SERVER_PASSWORD: ${OPENCODE_SERVER_PASSWORD}
+
+      # Paths (dalam container)
+      WORKSPACE_PATH: /workspace/ujion-ops
+      UJION_OPS_PATH: /workspace/ujion-ops
+      UJION_TKA_APPS_PATH: /workspace/ujion-tka-apps
+      DB_PATH: /data/ujion.db
+
+      # Provider API Keys (opsional, bisa di-set via dashboard UI /api/keys)
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      QWEN_API_KEY: ${QWEN_API_KEY:-}
+      MISTRAL_API_KEY: ${MISTRAL_API_KEY:-}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      TOGETHER_API_KEY: ${TOGETHER_API_KEY:-}
+
+      # Node
+      NODE_ENV: production
+    volumes:
+      # Persistent SQLite data
+      - ujion-data:/data
+      # ujion-ops repo (read-write untuk .opencode/ + tugas/*.md sync)
+      - ${UJION_OPS_HOST_PATH:-~/proyek/ujion-ops}:/workspace/ujion-ops
+      # ujion-tka-apps repo (read-only untuk konteks agent)
+      - ${UJION_TKA_APPS_HOST_PATH:-~/proyek/ujion-tka-apps}:/workspace/ujion-tka-apps:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/api/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  ujion-data:
+    driver: local

@@ -19,8 +19,38 @@ Dokumen: [`PRD.md`](PRD.md) produk · [`PASANG.md`](PASANG.md) pemasangan · [`C
 | `tugas/` | BOARD, KEBUTUHAN, KEPUTUSAN, ANTRIAN-PERSETUJUAN, INBOX |
 | `marketing/` | `basis/` (kompetitor, tren, audiens, ide) + output: `konten/`, `analitik/`, `kampanye/`, `riset/`, `brief/` |
 | `maintenance/` | laporan audit keamanan, log, draf konten admin |
-| `dashboard/` | dashboard lokal: `server.mjs`, `index.html`, `uji.mjs`, `contoh/` |
+| `dashboard/` | dashboard lokal v1: `server.mjs`, `index.html`, `uji.mjs`, `contoh/` (tetap utuh) |
+| `dashboard-v2/` | dashboard v2 (Next.js 16 + SQLite + opencode): 12 tahap selesai, spesifikasi di `dashboard/docs/00-OVERVIEW.md` s.d. `12-MIGRATION.md` |
+| `.opencode/` + `opencode.json` | config opencode v2 ter-generate dari DB (8 agents, 8 skills, 3 commands); JANGAN edit manual |
+| `docker-compose.yml` | deploy Coolify (container Next.js; opencode serve via systemd host) |
+| `dashboard-v2/deploy/` | `pasang-opencode-serve.sh`, unit systemd, `coolify-env.example`, panduan VPS |
 | `docs/` | dokumentasi rujukan |
+
+## Dashboard v2 (selesai 12/12 tahap, Next 16)
+
+Control plane penuh pengganti dashboard v1 read-only. DB SQLite (`dashboard-v2/data/`, gitignored) adalah source of truth; file `.opencode/`, `opencode.json`, `tugas/*.md` di-generate via `POST /api/sync` atau otomatis tiap mutasi.
+
+| Tahap | Isi | Status |
+|---|---|---|
+| 01 setup | Next.js 16 (dokumen minta 15, diputuskan tetap 16), shadcn, env VPS-ready, Dockerfile basis | Selesai |
+| 02 database | 13 tabel + seed (13 models, kantor, settings) | Selesai |
+| 03 auth | PIN + JWT cookie + rate limit; systemd opencode permanen | Selesai |
+| 04 layout | Sidebar 12 menu, header (status opencode/logout), dashboard stats | Selesai |
+| 05 agent-model | CRUD agent + permission matrix + avatar 2D/3D, model registry, AES key vault | Selesai |
+| 06 task-approval | Kanban drag-drop + validasi transisi + approval queue + inbox | Selesai |
+| 07 skill-mcp | Editor split-preview, MCP preset/toggle/test, assignment per-agent | Selesai |
+| 08 logs-kantor | Log filter + SSE live + session viewer, kantor 3 tab, settings (PIN/backup) | Selesai |
+| 09 playground | Chat + slash command, scheduler cron in-process + manual, batch 3 mode | Selesai |
+| 10 sync | Client opencode 20 fungsi, sync DB→file, proxy `/api/opencode`, auto-trigger | Selesai |
+| 11 docker | Container Next-only (serve tetap systemd host), compose + host-gateway, panduan Coolify | Selesai |
+| 12 migrasi | 8 agents + 8 skills (3 jadi commands) + kantor + 12 tasks dari `.claude/`/BOARD; uji lama 25/25 | Selesai |
+
+```bash
+cd dashboard-v2 && npm run dev            # dev -> http://localhost:3000 (PIN: 245100)
+npx tsx src/lib/db/migrate-from-claude.ts # migrasi ulang (idempoten)
+```
+
+Urutan ke VPS: `deploy/pasang-opencode-serve.sh` (systemd) → samakan `OPENCODE_SERVER_PASSWORD` di Coolify → deploy compose → cek badge hijau. Rename `.claude/` manual HANYA setelah `opencode debug config` + `agent list` beres. Gap diketahui: `KEBUTUHAN.md` belum di-sync (butuh tabel `needs`); Rina `bash: deny`; flag auth serve [perlu verifikasi] di VPS.
 
 ## Menjalankan
 Prasyarat: **Node >= 18**, **Claude Code** (versi yang mendukung frontmatter `skills`/`hooks`), dan **bash** (Windows: jalankan di WSL). Letakkan `ujion-ops` sejajar dengan `ujion-tka-apps`.

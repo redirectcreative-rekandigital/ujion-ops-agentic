@@ -1,0 +1,19 @@
+[Unit]
+Description=opencode serve untuk Dashboard Ujion v2
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/proyek/ujion-ops
+EnvironmentFile=/etc/opencode-serve.env
+# Bind 127.0.0.1 saja: hanya dashboard (PIN auth) yang menjadi pintu masuk.
+# CATATAN: cek `opencode serve --help` di VPS; bila ada opsi password/auth,
+# tambahkan flag-nya di baris ExecStart ini lalu `systemctl daemon-reload`.
+ExecStart=/usr/local/bin/opencode serve --hostname 127.0.0.1 --port 4096
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
