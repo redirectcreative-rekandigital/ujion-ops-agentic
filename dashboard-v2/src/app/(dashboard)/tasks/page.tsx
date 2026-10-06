@@ -123,6 +123,7 @@ export default function TasksPage() {
               </Select>
             </div>
           </div>
+          <div className="overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
@@ -147,6 +148,7 @@ export default function TasksPage() {
               ))}
             </TableBody>
           </Table>
+          </div>
         </TabsContent>
         <TabsContent value="inbox" className="space-y-4">
           <form onSubmit={addInbox} className="flex gap-2">

@@ -27,21 +27,26 @@ export function AppHeader() {
   }, []);
 
   return (
-    <header className="flex h-14 items-center justify-between border-b bg-background px-6">
-      <div className="flex items-center gap-3">
+    <header className="flex h-14 items-center justify-between border-b bg-background px-4 sm:px-6">
+      <div className="flex items-center gap-2 sm:gap-3">
         <SidebarTrigger />
-        <h1 className="text-sm font-medium text-muted-foreground">Dashboard Ujion</h1>
+        <h1 className="font-heading text-sm font-bold sm:text-sm sm:font-medium sm:text-muted-foreground">Dashboard Ujion</h1>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-1 sm:gap-3">
         <Badge variant={opencodeStatus === "connected" ? "default" : "destructive"} className="gap-1">
           <Wifi className="w-3 h-3" />
-          {opencodeStatus === "connected" ? "opencode connected" : "disconnected"}
+          <span className="hidden sm:inline">
+            {opencodeStatus === "connected" ? "opencode connected" : "disconnected"}
+          </span>
+          <span className="sm:hidden">
+            {opencodeStatus === "connected" ? "on" : "off"}
+          </span>
         </Badge>
         <ThemeToggle />
-        <Button variant="ghost" size="sm" onClick={handleLogout} className="gap-2">
+        <Button variant="ghost" size="sm" onClick={handleLogout} className="gap-2 px-2 sm:px-3">
           <LogOut className="w-4 h-4" />
-          Logout
+          <span className="hidden sm:inline">Logout</span>
         </Button>
       </div>
     </header>

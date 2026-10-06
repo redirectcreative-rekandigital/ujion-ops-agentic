@@ -156,6 +156,7 @@ export default function ModelsPage() {
           </SelectContent>
         </Select>
       </div>
+      <div className="overflow-x-auto">
       <Table>
         <TableHeader>
           <TableRow>
@@ -186,6 +187,7 @@ export default function ModelsPage() {
           ))}
         </TableBody>
       </Table>
+      </div>
     </div>
   );
 }

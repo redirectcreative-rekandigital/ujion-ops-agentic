@@ -28,6 +28,7 @@ const LEVEL_VARIANT: Record<string, "default" | "secondary" | "destructive" | "o
 
 export function LogTable({ rows }: { rows: LogRow[] }) {
   return (
+    <div className="overflow-x-auto">
     <Table>
       <TableHeader>
         <TableRow>
@@ -64,5 +65,6 @@ export function LogTable({ rows }: { rows: LogRow[] }) {
         ))}
       </TableBody>
     </Table>
+    </div>
   );
 }

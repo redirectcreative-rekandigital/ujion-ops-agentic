@@ -113,6 +113,7 @@ export default function KeysPage() {
           </Dialog>
         }
       />
+      <div className="overflow-x-auto">
       <Table>
         <TableHeader>
           <TableRow>
@@ -139,6 +140,7 @@ export default function KeysPage() {
           ))}
         </TableBody>
       </Table>
+      </div>
       {keys.length === 0 && (
         <p className="text-sm text-muted-foreground">Belum ada key tersimpan.</p>
       )}

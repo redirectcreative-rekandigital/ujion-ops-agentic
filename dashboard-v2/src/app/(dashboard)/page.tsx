@@ -55,6 +55,7 @@ export default async function DashboardPage() {
               Belum ada task. Task dibuat di 06-TASK-APPROVAL atau terisi via migrasi.
             </p>
           ) : (
+            <div className="overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -77,6 +78,7 @@ export default async function DashboardPage() {
                 ))}
               </TableBody>
             </Table>
+            </div>
           )}
         </CardContent>
       </Card>

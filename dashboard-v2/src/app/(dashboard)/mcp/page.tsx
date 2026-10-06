@@ -91,6 +91,7 @@ export default function McpPage() {
           </Dialog>
         }
       />
+      <div className="overflow-x-auto">
       <Table>
         <TableHeader>
           <TableRow>
@@ -133,6 +134,7 @@ export default function McpPage() {
           ))}
         </TableBody>
       </Table>
+      </div>
       {servers.length === 0 && (
         <p className="text-sm text-muted-foreground">Belum ada MCP server. Tambah dari preset.</p>
       )}
